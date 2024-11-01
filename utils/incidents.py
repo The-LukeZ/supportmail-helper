@@ -14,26 +14,25 @@ IncidentStatusUpdate = TypedDict("IncidentStatusUpdate", {
 Incident = TypedDict("Incident", {
     "id": str,
     "title": str,
-    "description": Optional[str],
     "updates": list[IncidentStatusUpdate],
     "created_at": datetime,
     "updated_at": Optional[datetime]
 })
 
 incidentColors = {
-    "Down": 0xff3333,
-    "Investigating": 0xfdff05,
-    "Monitoring": 0x00ffa7,
-    "Maintenance": 0x00a7ff,
-    "Resolved": 0x44ff44
+    IncidentStatus.Down: 0xff3333,
+    IncidentStatus.Investigating: 0xfdff05,
+    IncidentStatus.Monitoring: 0x00ffa7,
+    IncidentStatus.Maintenance: 0x00a7ff,
+    IncidentStatus.Resolved: 0x44ff44
 }
 
 incidentEmojis = {
-    "Down": "<:statusDown:1301964260221517994>",
-    "Investigating": "<:statusInvestigating:1301964255238819930>",
-    "Monitoring": "<:statusMonitor:1301964224502829067>",
-    "Maintenance": "<:statusMaintenance:1301964247147741296>",
-    "Resolved": "<:statusResolved:1301964214881095750>"
+    IncidentStatus.Down: "<:statusDown:1301964260221517994>",
+    IncidentStatus.Investigating: "<:statusInvestigating:1301964255238819930>",
+    IncidentStatus.Monitoring: "<:statusMonitor:1301964224502829067>",
+    IncidentStatus.Maintenance: "<:statusMaintenance:1301964247147741296>",
+    IncidentStatus.Resolved: "<:statusResolved:1301964214881095750>"
 }
 
 
@@ -49,7 +48,7 @@ def format_update_content(update: IncidentStatusUpdate) -> str:
             case IncidentStatus.Monitoring:
                 return "We have identified the issue and are monitoring the situation."
             case IncidentStatus.Maintenance:
-                return "We are currently performing maintenance. PLease be patient."
+                return "We are currently performing maintenance. Please be patient."
             case _:  # Resolved
                 return "The issue has been resolved."
 
@@ -58,18 +57,21 @@ def format_incident(incident: Incident) -> Embed:
     """
     Format an incident to a Discord embed
     """
+    startedAtTs = int(incident["created_at"].timestamp())
+
     return Embed(
-        title=f'Incident {incident["id"]}',
-        color=incidentColors[incident["updates"][-1]["status"].name],
+        title=incident["title"],
+        description=f'Started: <t:{startedAtTs}> (<t:{startedAtTs}:R>)' if len(incident["updates"]) > 1 else '',
+        color=incidentColors[incident["updates"][-1]["status"]],
         timestamp=incident["updated_at"],
         fields=[
             EmbedField(
-                name=f'{incidentEmojis[update["status"].name]} [ <t:{int(update["updated_at"].timestamp())}:R> ] {update["status"].name}',
+                name=f'{incidentEmojis[update["status"]]} [ <t:{int(update["updated_at"].timestamp())}:R> ] {update["status"].name}',
                 value=format_update_content(update),
                 inline=False
             ) for update in incident["updates"]
         ],
         footer=EmbedFooter(
-            text="ID: " + incident["id"]
+            text=incident["id"]
         )
     )

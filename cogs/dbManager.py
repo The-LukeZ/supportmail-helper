@@ -21,7 +21,6 @@ class DBManager(commands.Cog):
                 CREATE TABLE IF NOT EXISTS incidents (
                     id TEXT PRIMARY KEY,
                     title TEXT,
-                    description TEXT DEFAULT NULL,
                     msg_id TEXT DEFAULT NULL,
                     created_at TEXT,
                     resolved_at TEXT DEFAULT NULL
@@ -31,12 +30,12 @@ class DBManager(commands.Cog):
             await dbs.execute(
                 """
                 CREATE TABLE IF NOT EXISTS status_updates (
-                	status_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    status_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     incident_id TEXT,
                     status INTEGER DEFAULT 1,
                     content TEXT,
                     updated_at TEXT,
-					FOREIGN KEY (incident_id) REFERENCES incidents(id)
+                    FOREIGN KEY (incident_id) REFERENCES incidents(id)
                 )
                 """
             )

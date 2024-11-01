@@ -9,9 +9,6 @@ The source code of the helper bot for the SupportMail support server.
 
 If you want to use this code, you can do so by forking this repository and modifying the code to fit your needs.
 
-As stated by the license, you are not allowed to use this code for commercial purposes and you are not allowed to
-release any closed source versions of this code.
-
 ## Current Features
 
 - Auto Publishing of messages (`autoPublish.py`)
@@ -25,7 +22,7 @@ release any closed source versions of this code.
 
 ## License (Summary - not binding)
 
-### GPL3 LICENSE
+### __GPL3 LICENSE__
 
 1. Anyone can copy, modify and distribute this code.
 2. You have to include the license and copyright notice with each and every distribution.

@@ -15,7 +15,7 @@ async def on_ready():
 if __name__ == "__main__":
     for filename in os.listdir("cogs"):
         if filename.endswith(".py"):
-            bot.load_extension(f"cogs.{filename[:-3]}")
+            bot.load_extension(f"cogs.{filename.removesuffix('.py')}")
 
     load_dotenv()
     bot.run(os.getenv("botToken"))
